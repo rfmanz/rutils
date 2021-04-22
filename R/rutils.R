@@ -1,5 +1,5 @@
 
-library(data.table)
+
 
 # Find nas by column----
 pct_nulls = function(df)
