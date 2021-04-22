@@ -1,5 +1,5 @@
-
-
+library(rutils)
+#train  = fread(cmd = 'unzip -p /home/r/Downloads/tabular-playground-series-apr-2021.zip  train.csv')
 
 # Find nas by column----
 pct_nulls = function(df)
