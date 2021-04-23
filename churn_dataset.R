@@ -53,15 +53,35 @@ library(reticulate)
 train_nonulls2encoded = as.data.table(py$train)
 
 print("Numeric Variables")
-train_nonulls2encoded[,.(names = names(.SD),
-         Min = lapply(.SD,function(x) min(x,na.rm=TRUE)),
-         Mean = lapply(.SD,function(x)mean(x,na.rm=TRUE)),
-         mode= lapply(.SD,fmode),
-        pct_Nulls = lapply(.SD, function(x) sum(is.na(x)))),
+train[,.(Names = names(.SD),
+         Min = lapply(.SD,function(x) round(min(x,na.rm=TRUE),0)),
+         Mean = lapply(.SD,function(x) round(mean(x,na.rm=TRUE),0)),
+         Max = lapply(.SD,function(x) round(max(x,na.rm=TRUE),0)),
+         Mode= lapply(.SD, function(x) round(fmode(x),0)),
+        Pct_Nulls = lapply(.SD, function(x) percent(sum(is.na(x))/nrow(.SD),0.01)),
+        Count_Nulls = lapply(.SD, function(x) sum(is.na(x))),
+      Count_Not_Null = lapply(.SD, function(x) sum(!is.na(x)))),
     .SDcols = is.numeric]
 
+print("Categorical Variables")
+
+train[,customerID:=NULL]
+train[,.(Names = names(.SD),
+         Pct_Nulls = lapply(.SD, function(x) percent(sum(is.na(x))/nrow(.SD),0.01)),
+         Count_Nulls = lapply(.SD, function(x) sum(is.na(x))),
+         Count_Not_Null = lapply(.SD, function(x) sum(!is.na(x))),
+         #Levels = lapply(.SD, function(x) length(levels(as.factor(x)))),
+         Unique_values = fifelse(lapply(.SD, function(x) length(levels(as.factor(x)))) > 5, lapply(.SD, function(x) length(levels(as.factor(x)))), lapply(.SD, function(x)levels(as.factor(x))))),
+      .SDcols = is.character]
 
 
+
+describe_df(r.train)
+cat(names(table(as.factor(train$PaymentMethod))),sep = "|")
+
+
+
+prop.table(table(is.na(train$TotalCharges)))*100
 
 describe_df = function(df){
 print("Numeric Variables")
