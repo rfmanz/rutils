@@ -51,17 +51,28 @@ train_nonulls2 =  train_nonulls[,-c("customerID","Churn","V1")]
 
 library(reticulate)
 train_nonulls2encoded = as.data.table(py$train)
-s
-train_nonulls2encoded[,.(names = names(train_nonulls2encoded),min = lapply(.SD,min), mean = lapply(.SD,mean)), ,.SDcols = is.numeric]
+
+print("Numeric Variables")
+train_nonulls2encoded[,.(names = names(.SD),
+         Min = lapply(.SD,function(x) min(x,na.rm=TRUE)),
+         Mean = lapply(.SD,function(x)mean(x,na.rm=TRUE)),
+         mode= lapply(.SD,fmode),
+        pct_Nulls = lapply(.SD, function(x) sum(is.na(x)))),
+    .SDcols = is.numeric]
+
+
+
 
 describe_df = function(df){
-  Mode <- function(x) {
-    ux <- unique(x)
-    ux[which.max(tabulate(match(x, ux)))]
-  }
+print("Numeric Variables")
+df[,.(Names = names(.SD),
+        Min = lapply(.SD,function(x) min(x,na.rm=TRUE)),
+        Mean = lapply(.SD,function(x)mean(x,na.rm=TRUE)),
+        Mode= lapply(.SD,fmode),
+        pct_Nulls = lapply(.SD, sum(is.na))),
+     .SDcols = is.numeric]}
 
-    df[,.(names=names(df),min= lapply(.SD,min),mean= lapply(.SD,mean),max = lapply(SD,.max), mode = lapply(.SD,Mode))]
-  }}
+describe_df(train)
 
 Mode(train$tenure)
 describe(train$tenure)
@@ -97,7 +108,7 @@ train_nonulls2[,lapply(.SD, is.null)]
 
 
 train_nonulls[]
-train_nonulls2encoded[,.SD,.SDcols = is.numeric]
+train[,.SD,.SDcols = is.numeric]
 
 
 
