@@ -8,7 +8,16 @@ Authors@R:
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: Utilies for R
-Depends: data.table, Hmisc, xray, ggplot2, scales, DataExplorer, collapse, scales
+Depends: data.table, 
+         Hmisc, 
+         xray, 
+         ggplot2, 
+         scales, 
+         DataExplorer, 
+         collapse, 
+         scales, 
+         usefun, 
+         reticulate
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
