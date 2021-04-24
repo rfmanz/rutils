@@ -37,4 +37,9 @@ describe_df = function(df){
     print_empty_line()
   }
 }
+#' @export
+character_tofactor = function(df){
+for(j in which(sapply(all_data,class)=='character'))
+  set(all_data,,j=j,value = as.factor(all_data[[j]]))}
+
 
