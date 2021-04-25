@@ -10,6 +10,8 @@ import optuna
 
 all_data= r.all_data
 
+
+
 y = all_data.Churn
 x_train, x_test, y_train, y_test = train_test_split(all_data.drop("Churn",axis=1), y, test_size=.2)
 
@@ -78,6 +80,11 @@ for fold, (trn_idx, val_idx) in enumerate(kf.split(x, y)):
 np.mean(auc)
 
 roc_auc_score(y_test,preds)
+
+feature_importances_extra = pd.Series(model.feature_importances_,x_train.columns).sort_values(ascending=False)
+feature_importances_extra
+
+
 
 
 
